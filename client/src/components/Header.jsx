@@ -7,7 +7,7 @@ const Header = () => {
           fontWeight: "300",
           fontStyle: "normal",
         }}
-        className="text-3xl"
+        className="text-4xl"
       >
         xTensiver
       </h1>
