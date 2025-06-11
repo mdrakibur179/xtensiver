@@ -1,4 +1,3 @@
-import { Dropdown, DropdownItem } from "flowbite-react";
 import { Link } from "react-router-dom";
 
 const Header = () => {
@@ -34,15 +33,6 @@ const Header = () => {
         <nav>
           <ol>
             <li className="flex gap-4 items-center">
-              <Dropdown label="Pages" dismissOnClick={true} inline>
-                <DropdownItem>
-                  <Link to="/about">About Us</Link>
-                </DropdownItem>
-                <DropdownItem>
-                  <Link to="/contact">Contact Us</Link>
-                </DropdownItem>
-              </Dropdown>
-
               {navLinks.map((link) => (
                 <Link key={link.link} to={link.link}>
                   {link.title}
