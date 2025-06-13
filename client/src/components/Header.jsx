@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { FaSearch, FaMoon, FaSun, FaTimes } from "react-icons/fa";
+import { FaMoon, FaSearch, FaSun, FaTimes } from "react-icons/fa";
+import { MdClose, MdMenu, MdOutlineMenu } from "react-icons/md";
 
 const Header = () => {
   const [darkMode, setDarkMode] = useState(false);
@@ -40,11 +41,23 @@ const Header = () => {
     }
   }, []);
 
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [mobileMenuOpen]);
+
   return (
     <header
-      className={`sticky top-0 z-50 transition-all duration-300 ${
+      className={`sticky top-0 z-100 transition-all border-b border-gray-50 duration-300 ${
         scrolled
-          ? "bg-white/90 dark:bg-gray-900/90 backdrop-blur-md shadow-sm"
+          ? "bg-white/50 dark:bg-gray-900 backdrop-blur-lg shadow-sm"
           : "bg-white dark:bg-gray-900 py-1"
       }`}
     >
@@ -83,7 +96,7 @@ const Header = () => {
             {/* Dark/Light Mode Toggle */}
             <button
               onClick={toggleDarkMode}
-              className="flex items-center cursor-pointer justify-center w-10 h-10 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-gray-700 dark:text-gray-300"
+              className="flex items-center cursor-pointer justify-center w-10 h-10 transition-all text-gray-700 dark:text-gray-300"
             >
               {darkMode ? (
                 <FaSun className="text-lg" />
@@ -95,64 +108,65 @@ const Header = () => {
             {/* Login Button */}
             <Link
               to="/sign-in"
-              className="hidden md:block border text-sm px-4 py-2 rounded-full transition border-gray-400 text-black dark:text-white hover:bg-amber-100 dark:hover:bg-amber-300/10"
+              className="hidden md:block border text-sm px-4 py-2 rounded-full transition border-gray-400 text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-300/10"
             >
-              Signin
+              Login
             </Link>
 
             {/* Mobile Menu Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-gray-700 dark:text-gray-300"
+              className="md:hidden cursor-pointer flex items-center justify-center w-10 h-10 transition-colors text-gray-700 dark:text-gray-300"
             >
               {mobileMenuOpen ? (
-                <FaTimes className="text-lg" />
+                <MdClose className="text-3xl" />
               ) : (
-                <svg
-                  className="w-6 h-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
-                </svg>
+                <MdOutlineMenu className="text-3xl" />
               )}
             </button>
           </div>
         </div>
 
-        {/* Mobile Menu */}
         {mobileMenuOpen && (
           <div
-            className={`md:hidden mt-4 pb-4 ${
-              darkMode ? "bg-gray-800" : "bg-gray-50"
-            } rounded-lg`}
+            className={`fixed md:hidden left-0 right-0 top-18 bottom-0 z-50 transform ${
+              mobileMenuOpen ? "translate-x-0" : "translate-x-full"
+            } transition-transform duration-500 ease-in-out ${
+              darkMode ? "bg-gray-900/90" : "bg-gray-100/90"
+            } backdrop-blur-md p-6`}
           >
-            <nav className="flex flex-col space-y-3 px-4 py-2">
+            {/* Search */}
+            <div className="mb-6 relative flex items-center">
+              <input
+                type="text"
+                placeholder="Search blogs, articles, or more..."
+                className="w-full px-4 py-2 rounded-full border border-gray-400 dark:border-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-100 transition"
+              />
+              <FaSearch className="absolute right-4 text-gray-400" />
+            </div>
+
+            {/* Menu Links */}
+            <nav className="flex flex-col space-y-4">
               {navLinks.map((item) => (
                 <Link
                   key={item.link}
                   to={item.link}
-                  className="font-medium py-2 px-3 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300"
                   onClick={() => setMobileMenuOpen(false)}
+                  className="text-2xl font-semibold py-2 px-4 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-gray-900 dark:text-gray-100"
                 >
                   {item.title}
                 </Link>
               ))}
             </nav>
 
-            <div className="px-4 pt-3">
+            {/* Signin Button */}
+            <div className="absolute bottom-16 left-0 right-0 px-6">
               <Link
                 to="/sign-in"
-                className="block w-full text-center border text-sm px-4 py-2 rounded-full transition border-amber-400 text-black dark:text-white hover:bg-amber-100 dark:hover:bg-amber-300/10"
                 onClick={() => setMobileMenuOpen(false)}
+                className="block w-full text-center border px-4 py-2 rounded-full font-semibold border-gray-400 dark:border-gray-500 text-gray-900 dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-700 transition"
               >
-                SignIn
+                Login
               </Link>
             </div>
           </div>
