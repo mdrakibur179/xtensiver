@@ -48,20 +48,17 @@ const Header = () => {
     } else {
       document.body.style.overflow = "auto";
     }
-    return () => {
-      document.body.style.overflow = "auto";
-    };
   }, [mobileMenuOpen]);
 
   return (
     <header
-      className={`sticky top-0 z-100 transition-all border-b border-gray-50 duration-300 ${
+      className={`sticky top-0 z-50 transition-all border-b border-gray-50 duration-300 ${
         scrolled
           ? "bg-white/50 dark:bg-gray-900 backdrop-blur-lg shadow-sm"
           : "bg-white dark:bg-gray-900 py-1"
       }`}
     >
-      <div className="container mx-auto px-4 py-3">
+      <div className="container relative mx-auto px-4 py-3">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <div className="flex-shrink-0">
@@ -129,7 +126,7 @@ const Header = () => {
 
         {mobileMenuOpen && (
           <div
-            className={`fixed md:hidden left-0 right-0 top-18 bottom-0 z-50 transform ${
+            className={`absolute min-h-screen md:hidden left-0 right-0 top-16 bottom-0 z-50 transform ${
               mobileMenuOpen ? "translate-x-0" : "translate-x-full"
             } transition-transform duration-500 ease-in-out ${
               darkMode ? "bg-gray-900/90" : "bg-gray-100/90"
@@ -152,7 +149,7 @@ const Header = () => {
                   key={item.link}
                   to={item.link}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="text-2xl font-semibold py-2 px-4 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-gray-900 dark:text-gray-100"
+                  className="text-xl font-semibold py-2 px-4 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-gray-900 dark:text-gray-100"
                 >
                   {item.title}
                 </Link>
@@ -160,11 +157,11 @@ const Header = () => {
             </nav>
 
             {/* Signin Button */}
-            <div className="absolute bottom-16 left-0 right-0 px-6">
+            <div className="mt-8">
               <Link
                 to="/sign-in"
                 onClick={() => setMobileMenuOpen(false)}
-                className="block w-full text-center border px-4 py-2 rounded-full font-semibold border-gray-400 dark:border-gray-500 text-gray-900 dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-700 transition"
+                className="block w-full text-center border px-4 py-2 rounded-full bg-blue-500 font-semibold border-teal-500 dark:border-teal-500 text-white dark:text-gray-100 hover:bg-blue-600 dark:hover:bg-gray-700 transition"
               >
                 Login
               </Link>
