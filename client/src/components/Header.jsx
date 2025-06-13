@@ -128,9 +128,7 @@ const Header = () => {
           <div
             className={`absolute min-h-screen md:hidden left-0 right-0 top-16 bottom-0 z-50 transform ${
               mobileMenuOpen ? "translate-x-0" : "translate-x-full"
-            } transition-transform duration-500 ease-in-out ${
-              darkMode ? "bg-gray-900/90" : "bg-gray-100/90"
-            } backdrop-blur-md p-6`}
+            } transition-transform duration-500 ease-in-out bg-gray-100/90 dark:bg-gray-900/90 backdrop-blur-md p-6`}
           >
             {/* Search */}
             <div className="mb-6 relative flex items-center">
