@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { FaMoon, FaSearch, FaSun } from "react-icons/fa";
 import { MdClose, MdOutlineMenu } from "react-icons/md";
@@ -8,6 +8,8 @@ const Header = () => {
   const [darkMode, setDarkMode] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+
+  const menuRef = useRef(null);
 
   const navLinks = [
     { link: "/", title: "Home" },
@@ -54,6 +56,18 @@ const Header = () => {
     };
   }, [mobileMenuOpen]);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setMobileMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [mobileMenuOpen]);
+
   // Animation variants for mobile menu
   const mobileMenuVariants = {
     hidden: {
@@ -76,7 +90,7 @@ const Header = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all border-b border-gray-50 duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all border-b border-gray-100 duration-300 ${
         scrolled
           ? "bg-white/50 dark:bg-gray-900 backdrop-blur-lg shadow-sm"
           : "bg-white dark:bg-gray-900"
@@ -142,7 +156,7 @@ const Header = () => {
               {/* Mobile Menu Button */}
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden cursor-pointer flex items-center justify-center w-10 h-10 transition-colors text-gray-700 dark:text-gray-300"
+                className="md:hidden z-50 cursor-pointer flex items-center justify-center w-10 h-10 transition-colors text-gray-700 dark:text-gray-300"
               >
                 {mobileMenuOpen ? (
                   <MdClose className="text-3xl" />
@@ -157,21 +171,19 @@ const Header = () => {
           <AnimatePresence>
             {mobileMenuOpen && (
               <motion.div
+                ref={menuRef}
                 initial="hidden"
                 animate="visible"
                 exit="hidden"
                 variants={mobileMenuVariants}
-                className={`fixed md:hidden inset-0 left-16 top-0 bottom-0 min-h-screen z-40 bg-gray-100/90 dark:bg-gray-900/90 backdrop-blur-md p-6 overflow-y-auto`}
-                style={{
-                  marginTop: scrolled ? "3rem" : "4rem", // Adjust based on scrolled state
-                }}
+                className={`fixed md:hidden inset-0 pt-20 left-22 top-0 bottom-0 min-h-screen z-40 bg-gray-100/70 dark:bg-gray-900/60 backdrop-blur-md p-6 overflow-y-auto`}
               >
                 {/* Search */}
                 <div className="mb-6 flex items-center gap-4">
                   <input
                     type="text"
                     placeholder="Search blogs or articles..."
-                    className="w-full px-4 py-2 rounded-full border border-gray-400 dark:border-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-100 transition"
+                    className="w-full px-4 py-2 rounded-full border border-gray-400 dark:border-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800/80 dark:text-gray-100 transition"
                   />
                   <FaSearch className="text-black dark:text-white text-2xl rounded-full" />
                 </div>
@@ -183,7 +195,7 @@ const Header = () => {
                       key={item.link}
                       to={item.link}
                       onClick={() => setMobileMenuOpen(false)}
-                      className="text-xl font-semibold py-2 px-4 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-gray-900 dark:text-gray-100"
+                      className="text-xl font-extralight py-2 px-4 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-gray-900 dark:text-gray-100"
                     >
                       {item.title}
                     </Link>
@@ -191,7 +203,7 @@ const Header = () => {
                 </nav>
 
                 {/* Signin Button */}
-                <div className="mt-8">
+                <div className="mt-4">
                   <Link
                     to="/sign-in"
                     onClick={() => setMobileMenuOpen(false)}
