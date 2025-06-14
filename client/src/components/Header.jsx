@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { FaMoon, FaSearch, FaSun } from "react-icons/fa";
 import { MdClose, MdOutlineMenu } from "react-icons/md";
 import { motion, AnimatePresence } from "framer-motion";
@@ -121,13 +121,19 @@ const Header = () => {
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center space-x-8">
               {navLinks.map((item) => (
-                <Link
+                <NavLink
                   key={item.link}
                   to={item.link}
-                  className="font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                  className={({ isActive }) =>
+                    `font-semibold ${
+                      isActive
+                        ? "text-blue-500"
+                        : "text-gray-700 dark:text-gray-300"
+                    } hover:text-blue-600 dark:hover:text-blue-400 transition-colors`
+                  }
                 >
                   {item.title}
-                </Link>
+                </NavLink>
               ))}
             </nav>
 
@@ -191,14 +197,18 @@ const Header = () => {
                 {/* Menu Links */}
                 <nav className="flex flex-col space-y-4">
                   {navLinks.map((item) => (
-                    <Link
+                    <NavLink
                       key={item.link}
                       to={item.link}
                       onClick={() => setMobileMenuOpen(false)}
-                      className="text-xl font-extralight py-2 px-4 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-gray-900 dark:text-gray-100"
+                      className={({ isActive }) =>
+                        `${
+                          isActive ? "bg-gray-700" : ""
+                        } text-xl font-extralight py-2 px-4 rounded hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors text-gray-900 dark:text-gray-100`
+                      }
                     >
                       {item.title}
-                    </Link>
+                    </NavLink>
                   ))}
                 </nav>
 
