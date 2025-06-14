@@ -90,18 +90,18 @@ const Header = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all border-b border-gray-100 duration-300 ${
+      className={`fixed top-0 dark:bg-gray-950 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-white/50 dark:bg-gray-900 backdrop-blur-lg shadow-sm"
-          : "bg-white dark:bg-gray-900"
+          ? "backdrop-blur-lg shadow-sm bg-white/70"
+          : "bg-white shadow-xs"
       }`}
     >
       <div
-        className={`relative transition-all duration-300 ${
+        className={`relative transition-all ease-in-out duration-600 ${
           scrolled ? "" : "py-1"
         }`}
       >
-        <div className="container mx-auto px-4 py-2">
+        <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
             {/* Logo */}
             <div className="flex-shrink-0">
@@ -176,7 +176,7 @@ const Header = () => {
                 animate="visible"
                 exit="hidden"
                 variants={mobileMenuVariants}
-                className={`fixed md:hidden inset-0 pt-20 left-22 top-0 bottom-0 min-h-screen z-40 bg-gray-100/70 dark:bg-gray-900/60 backdrop-blur-md p-6 overflow-y-auto`}
+                className={`fixed md:hidden inset-0 pt-20 left-22 top-0 bottom-0 min-h-screen z-40 bg-teal-100/40 dark:bg-gray-950/60 backdrop-blur-md p-6 overflow-y-auto`}
               >
                 {/* Search */}
                 <div className="mb-6 flex items-center gap-4">
