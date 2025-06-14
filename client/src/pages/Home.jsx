@@ -1,4 +1,4 @@
 const Home = () => {
-  return <div className="min-h-[100rem] pt-16">Home</div>;
+  return <div className="min-h-[100rem]">Home</div>;
 };
 export default Home;
