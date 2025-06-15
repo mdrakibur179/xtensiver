@@ -3,11 +3,14 @@ import { Link, NavLink } from "react-router-dom";
 import { FaMoon, FaSearch, FaSun } from "react-icons/fa";
 import { MdClose, MdOutlineMenu } from "react-icons/md";
 import { motion, AnimatePresence } from "framer-motion";
+import Searchbox from "./Searchbox";
 
 const Header = () => {
   const [darkMode, setDarkMode] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const menuRef = useRef(null);
 
@@ -46,7 +49,7 @@ const Header = () => {
 
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
-    if (mobileMenuOpen) {
+    if (mobileMenuOpen || isModalOpen) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "auto";
@@ -54,7 +57,7 @@ const Header = () => {
     return () => {
       document.body.style.overflow = "auto";
     };
-  }, [mobileMenuOpen]);
+  }, [mobileMenuOpen, isModalOpen]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -90,10 +93,8 @@ const Header = () => {
 
   return (
     <header
-      className={`fixed top-0 dark:bg-gray-950 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "backdrop-blur-lg shadow-sm bg-white/70"
-          : "bg-white shadow-xs"
+      className={`fixed top-0 backdrop-blur-sm dark:bg-gray-950 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled ? "shadow-sm bg-gray-50" : "bg-gray-50 shadow-xs"
       }`}
     >
       <div
@@ -104,10 +105,10 @@ const Header = () => {
         <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <div className="flex-shrink-0">
+            <div className="flex-shrink-0 flex items-center">
               <Link
                 to="/"
-                className="text-3xl font-bold text-blue-600 dark:text-blue-400"
+                className="text-3xl font-bold text-blue-600 dark:text-blue-400 mr-12"
                 style={{
                   fontFamily: "Rowdies, sans-serif",
                   fontWeight: "300",
@@ -116,60 +117,70 @@ const Header = () => {
               >
                 xTensiver
               </Link>
+              <div className="hidden md:flex">
+                <Searchbox onClick={() => setIsModalOpen(true)} />
+              </div>
             </div>
 
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center space-x-8">
-              {navLinks.map((item) => (
-                <NavLink
-                  key={item.link}
-                  to={item.link}
-                  className={({ isActive }) =>
-                    `font-semibold ${
-                      isActive
-                        ? "text-blue-500"
-                        : "text-gray-700 dark:text-gray-300"
-                    } hover:text-blue-600 dark:hover:text-blue-400 transition-colors`
-                  }
+            <div className="flex gap-4">
+              {/* Desktop Navigation */}
+              <nav className="hidden md:flex items-center space-x-8">
+                {navLinks.map((item) => (
+                  <NavLink
+                    key={item.link}
+                    to={item.link}
+                    className={({ isActive }) =>
+                      `font-[500] ${
+                        isActive
+                          ? "text-blue-600 dark:text-white"
+                          : "text-gray-700 dark:text-gray-400"
+                      } hover:text-blue-600 dark:hover:text-white transition-colors`
+                    }
+                  >
+                    {item.title}
+                  </NavLink>
+                ))}
+              </nav>
+
+              {/* Right Side Controls */}
+              <div className="flex items-center gap-4">
+                <div className="md:hidden">
+                  <Searchbox onClick={() => setIsModalOpen(true)} />
+                </div>
+                {/* Dark/Light Mode Toggle */}
+                <button
+                  onClick={toggleDarkMode}
+                  className="flex items-center cursor-pointer justify-center w-10 h-10 transition-all text-gray-700 dark:text-gray-300"
                 >
-                  {item.title}
-                </NavLink>
-              ))}
-            </nav>
+                  {darkMode ? (
+                    <FaSun className="text-lg" />
+                  ) : (
+                    <FaMoon className="text-lg" />
+                  )}
+                </button>
 
-            {/* Right Side Controls */}
-            <div className="flex items-center gap-4">
-              {/* Dark/Light Mode Toggle */}
-              <button
-                onClick={toggleDarkMode}
-                className="flex items-center cursor-pointer justify-center w-10 h-10 transition-all text-gray-700 dark:text-gray-300"
-              >
-                {darkMode ? (
-                  <FaSun className="text-lg" />
-                ) : (
-                  <FaMoon className="text-lg" />
+                {/* Login Button */}
+                <Link
+                  to="/sign-in"
+                  className="hidden md:block border text-sm px-4 py-2 rounded-full transition border-gray-400 text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-300/10"
+                >
+                  Login
+                </Link>
+
+                {/* Mobile Menu Button */}
+                {!isModalOpen && (
+                  <button
+                    onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                    className="md:hidden z-50 cursor-pointer flex items-center justify-center w-10 h-10 transition-colors text-gray-700 dark:text-gray-300"
+                  >
+                    {mobileMenuOpen ? (
+                      <MdClose className="text-3xl" />
+                    ) : (
+                      <MdOutlineMenu className="text-3xl" />
+                    )}
+                  </button>
                 )}
-              </button>
-
-              {/* Login Button */}
-              <Link
-                to="/sign-in"
-                className="hidden md:block border text-sm px-4 py-2 rounded-full transition border-gray-400 text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-300/10"
-              >
-                Login
-              </Link>
-
-              {/* Mobile Menu Button */}
-              <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden z-50 cursor-pointer flex items-center justify-center w-10 h-10 transition-colors text-gray-700 dark:text-gray-300"
-              >
-                {mobileMenuOpen ? (
-                  <MdClose className="text-3xl" />
-                ) : (
-                  <MdOutlineMenu className="text-3xl" />
-                )}
-              </button>
+              </div>
             </div>
           </div>
 
@@ -184,16 +195,6 @@ const Header = () => {
                 variants={mobileMenuVariants}
                 className={`fixed md:hidden inset-0 pt-20 left-22 top-0 bottom-0 min-h-screen z-40 bg-teal-100/40 dark:bg-gray-950/60 backdrop-blur-md p-6 overflow-y-auto`}
               >
-                {/* Search */}
-                <div className="mb-6 flex items-center gap-4">
-                  <input
-                    type="text"
-                    placeholder="Search blogs or articles..."
-                    className="w-full px-4 py-2 rounded-full border border-gray-400 dark:border-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800/80 dark:text-gray-100 transition"
-                  />
-                  <FaSearch className="text-black dark:text-white text-2xl rounded-full" />
-                </div>
-
                 {/* Menu Links */}
                 <nav className="flex flex-col space-y-4">
                   {navLinks.map((item) => (
@@ -203,8 +204,8 @@ const Header = () => {
                       onClick={() => setMobileMenuOpen(false)}
                       className={({ isActive }) =>
                         `${
-                          isActive ? "bg-gray-700" : ""
-                        } text-xl font-extralight py-2 px-4 rounded hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors text-gray-900 dark:text-gray-100`
+                          isActive ? "bg-gray-700 text-white" : ""
+                        } text-xl font-extralight py-2 px-4 rounded hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors text-gray-600 dark:text-gray-100`
                       }
                     >
                       {item.title}
@@ -227,6 +228,73 @@ const Header = () => {
           </AnimatePresence>
         </div>
       </div>
+
+      {/* Modal */}
+      {isModalOpen && (
+        <div
+          aria-hidden="false"
+          tabIndex="-1"
+          onClick={() => setIsModalOpen(false)}
+          className="fixed inset-0 px-2 z-[99rem] flex min-h-screen justify-center items-start pt-28 backdrop-blur-md bg-gray-950/80"
+        >
+          {/* Modal content */}
+          <motion.div
+            initial={{ y: -50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -50, opacity: 0 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white dark:bg-gray-950 p-6 rounded-xl shadow-2xl w-full max-w-md transform border border-gray-200 dark:border-gray-700"
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                Search
+              </h3>
+              <button
+                aria-label="Close modal"
+                onClick={() => setIsModalOpen(false)}
+                className="text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
+              >
+                {/* Close icon */}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  className="w-5 h-5"
+                >
+                  <path
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="m6 18 12-12M6 6l12 12"
+                  ></path>
+                </svg>
+              </button>
+            </div>
+
+            {/* Search input */}
+            <input
+              type="text"
+              placeholder="Search blogs or articles…"
+              className="w-full p-2 rounded-md border border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+
+            {/* Action button */}
+            <div className="flex justify-end mt-4">
+              <button
+                onClick={() => {
+                  /* perform search */
+                }}
+                className="bg-blue-500 px-4 py-2 rounded-md font-semibold text-gray-100 hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-300"
+              >
+                Search
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
     </header>
   );
 };
