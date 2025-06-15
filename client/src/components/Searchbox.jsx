@@ -9,13 +9,13 @@ const Searchbox = ({ onClick }) => {
         readOnly
         type="text"
         placeholder="Search blogs or articles..."
-        className="hidden lg:flex px-4 py-[.35rem] rounded-full border border-gray-400 dark:border-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800/80 dark:text-gray-100 transition cursor-pointer"
+        className="hidden lg:flex px-4 py-[.15rem] rounded-full border border-gray-400 dark:border-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800/80 dark:text-gray-100 transition cursor-pointer"
       />
 
       {/* This icon is a trigger to show modal */}
       <div
         onClick={onClick}
-        className="absolute right-[3px] p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors cursor-pointer"
+        className="absolute right-[2px] p-[.35rem] rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors cursor-pointer"
       >
         <FaSearch className="text-gray-600 dark:text-gray-100" />
       </div>

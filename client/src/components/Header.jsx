@@ -99,10 +99,10 @@ const Header = () => {
     >
       <div
         className={`relative transition-all ease-in-out duration-600 ${
-          scrolled ? "" : "py-1"
+          scrolled ? "" : "py-[.25rem]"
         }`}
       >
-        <div className="container mx-auto px-4 py-3">
+        <div className="container mx-auto px-4 py-2">
           <div className="flex items-center justify-between">
             {/* Logo */}
             <div className="flex-shrink-0 flex items-center">
@@ -162,7 +162,7 @@ const Header = () => {
                 {/* Login Button */}
                 <Link
                   to="/sign-in"
-                  className="hidden md:block border text-sm px-4 py-2 rounded-full transition border-gray-400 text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-300/10"
+                  className="hidden md:block border text-sm px-4 py-1 rounded-full transition border-gray-400 text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-300/10"
                 >
                   Login
                 </Link>
@@ -205,7 +205,7 @@ const Header = () => {
                       className={({ isActive }) =>
                         `${
                           isActive ? "bg-gray-700 text-white" : ""
-                        } text-xl font-extralight py-2 px-4 rounded hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors text-gray-600 dark:text-gray-100`
+                        } text-xl font-extralight py-2 px-4 rounded hover:bg-gray-400 dark:hover:bg-gray-800 transition-colors text-gray-800 dark:text-gray-100`
                       }
                     >
                       {item.title}
@@ -235,7 +235,7 @@ const Header = () => {
           aria-hidden="false"
           tabIndex="-1"
           onClick={() => setIsModalOpen(false)}
-          className="fixed inset-0 px-2 z-[99rem] flex min-h-screen justify-center items-start pt-28 backdrop-blur-md bg-gray-950/80"
+          className="fixed inset-0 px-2 z-[99rem] flex min-h-screen justify-center items-start pt-28 backdrop-blur-md bg-gray-950/90"
         >
           {/* Modal content */}
           <motion.div
