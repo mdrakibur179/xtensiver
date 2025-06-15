@@ -162,7 +162,7 @@ const Header = () => {
                 {/* Login Button */}
                 <Link
                   to="/sign-in"
-                  className="hidden md:block border text-sm px-4 py-1 rounded-full transition border-gray-400 text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-300/10"
+                  className="hidden md:block border text-sm px-4 py-1 rounded-full transition border-gray-400 text-black dark:text-white hover:bg-gray-200 dark:hover:bg-gray-800"
                 >
                   Login
                 </Link>
