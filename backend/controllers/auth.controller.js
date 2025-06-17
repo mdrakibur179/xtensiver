@@ -13,7 +13,7 @@ export const signup = async (req, res, next) => {
     email === "" ||
     password === ""
   ) {
-    next(errorHandler(400, "All Fields Are Required"));
+    return next(errorHandler(400, "All Fields Are Required"));
   }
 
   // Hash password
