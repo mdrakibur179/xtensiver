@@ -10,11 +10,10 @@ dotenv.config();
 
 const PORT = process.env.PORT || 3000;
 
-app.use("/api/user", userRoutes);
-
-app.use("/api/auth", authRoutes);
-
 app.listen(3000, () => {
   connectDB();
   console.log("App is listening");
 });
+
+app.use("/api/user", userRoutes);
+app.use("/api/auth", authRoutes);
