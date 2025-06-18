@@ -93,8 +93,8 @@ const Header = () => {
 
   return (
     <header
-      className={`fixed top-0 backdrop-blur-sm dark:bg-gray-950 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? "shadow-sm bg-gray-50" : "bg-gray-50 shadow-xs"
+      className={`fixed top-0 backdrop-blur-sm dark:bg-gray-950/70 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled ? "shadow-sm bg-gray-100/50" : "bg-gray-200/70 shadow-xs"
       }`}
     >
       <div
@@ -161,7 +161,7 @@ const Header = () => {
 
                 {/* Login Button */}
                 <Link
-                  to="/sign-in"
+                  to="/sign-up"
                   className="hidden md:block border text-sm px-4 py-1 rounded-full transition border-gray-400 text-black dark:text-white hover:bg-gray-200 dark:hover:bg-gray-800"
                 >
                   Login
@@ -193,7 +193,7 @@ const Header = () => {
                 animate="visible"
                 exit="hidden"
                 variants={mobileMenuVariants}
-                className={`fixed md:hidden inset-0 pt-20 left-22 top-0 bottom-0 min-h-screen z-40 bg-teal-100/40 dark:bg-gray-950/60 backdrop-blur-md p-6 overflow-y-auto`}
+                className={`fixed md:hidden inset-0 pt-20 left-22 top-0 bottom-0 min-h-screen z-40 bg-gray-200/90 dark:bg-gray-950/60 backdrop-blur-lg p-6 overflow-y-auto`}
               >
                 {/* Menu Links */}
                 <nav className="flex flex-col space-y-4">
@@ -216,7 +216,7 @@ const Header = () => {
                 {/* Signin Button */}
                 <div className="mt-4">
                   <Link
-                    to="/sign-in"
+                    to="/sign-up"
                     onClick={() => setMobileMenuOpen(false)}
                     className="block w-full text-center border px-4 py-2 rounded-full bg-blue-500 font-semibold border-teal-500 dark:border-teal-500 text-white dark:text-gray-100 hover:bg-blue-600 dark:hover:bg-blue-700 transition"
                   >
