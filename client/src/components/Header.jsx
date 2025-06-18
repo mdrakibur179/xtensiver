@@ -193,7 +193,7 @@ const Header = () => {
                 animate="visible"
                 exit="hidden"
                 variants={mobileMenuVariants}
-                className={`fixed md:hidden inset-0 pt-20 left-22 top-0 bottom-0 min-h-screen z-40 bg-gray-200/90 dark:bg-gray-950/60 backdrop-blur-lg p-6 overflow-y-auto`}
+                className={`fixed md:hidden inset-0 pt-20 left-22 top-0 bottom-0 min-h-screen z-40 bg-gray-200 dark:bg-gray-950 backdrop-blur-lg p-6 overflow-y-auto`}
               >
                 {/* Menu Links */}
                 <nav className="flex flex-col space-y-4">
