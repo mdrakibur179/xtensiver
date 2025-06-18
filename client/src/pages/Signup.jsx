@@ -1,3 +1,4 @@
+import { generateFromEmail, generateUsername } from "unique-username-generator";
 import illustration from "../assets/sign-up_page.jpg";
 import ai from "../assets/ai-platform.svg";
 import { FaEye, FaEyeSlash, FaGoogle } from "react-icons/fa";
@@ -6,11 +7,19 @@ import { useState } from "react";
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
+  const [userName, setUserName] = useState("");
 
   function handleSubmit(e) {
     e.preventDefault();
+  }
 
-    console.log(email);
+  function generateUserName() {
+    if (!email) {
+      return;
+    } else {
+      const username = generateFromEmail(email);
+      setUserName(username);
+    }
   }
 
   return (
@@ -62,13 +71,18 @@ const Signup = () => {
               </label>
               <div className="relative">
                 <input
+                  value={userName}
+                  onChange={(e) => setUserName(e.target.value)}
                   type="text"
                   id="user-name"
                   className="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light"
                   placeholder="enter your username"
                   required
                 />
-                <button className="absolute right-2.5 cursor-pointer top-1/2 transform -translate-y-1/2">
+                <button
+                  onClick={generateUserName}
+                  className="absolute right-2.5 cursor-pointer top-1/2 transform -translate-y-1/2"
+                >
                   <img src={ai} className="w-5 h-5" alt="ai" />
                 </button>
               </div>
@@ -127,14 +141,17 @@ const Signup = () => {
             <div className="flex items-center gap-1 flex-col md:flex-row md:gap-4">
               <button
                 type="submit"
-                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full cursor-pointer text-sm px-5 py-3 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               >
                 Register new account
               </button>
 
               <span>or</span>
 
-              <button className="text-black dark:text-white flex items-center gap-2 cursor-pointer rounded-full border border-black dark:border-white hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 font-medium text-sm px-5 py-2.5 text-center transition-colors">
+              <button
+                type="button"
+                className="text-black dark:text-white flex items-center gap-2 cursor-pointer rounded-full border border-black dark:border-white hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 font-medium text-sm px-5 py-2.5 text-center transition-colors"
+              >
                 <FaGoogle />
                 Continue with Google
               </button>
