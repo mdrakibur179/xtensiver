@@ -1,161 +1,261 @@
-import { generateFromEmail, generateUsername } from "unique-username-generator";
+import { Link, useNavigate } from "react-router-dom";
 import illustration from "../assets/sign-up_page.jpg";
-import ai from "../assets/ai-platform.svg";
 import { FaEye, FaEyeSlash, FaGoogle } from "react-icons/fa";
 import { useState } from "react";
+import { Spinner } from "flowbite-react";
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [userName, setUserName] = useState("");
+  const [password, setPassword] = useState("");
+  const [checkbox, setCheckbox] = useState(false);
 
-  function handleSubmit(e) {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const [emailError, setEmailError] = useState("");
+  const [userNameError, setUserNameError] = useState("");
+
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-  }
 
-  function generateUserName() {
-    if (!email) {
-      return;
-    } else {
-      const username = generateFromEmail(email);
-      setUserName(username);
+    // Reset error states
+    setError(null);
+    setEmailError("");
+    setUserNameError("");
+
+    if (!email || !userName || !password || !checkbox) {
+      return setError("Please fill up all the fields.");
     }
-  }
+
+    const formData = {
+      email,
+      username: userName,
+      password,
+    };
+
+    setIsLoading(true);
+
+    try {
+      const res = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || data.success === false) {
+        const msg = data.message || "";
+
+        if (msg.includes("E11000")) {
+          if (msg.includes("email")) {
+            setEmailError("Email already exists.");
+          }
+          if (msg.includes("username")) {
+            setUserNameError("Username already exists.");
+          }
+        } else {
+          alert(msg || "Something went wrong during signup.");
+        }
+      } else {
+        alert("✅ Signup successful");
+        setEmail("");
+        setUserName("");
+        setPassword("");
+        setCheckbox(false);
+        navigate("/sign-in");
+      }
+    } catch (err) {
+      alert("🚫 Network error: " + err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
-    <div className="min-h-screen max-w-screen grid place-content-center pt-16 dark:bg-teal-950  text-black transition-all ease-in-out duration-300 dark:text-white">
-      {/* Sign-up Text */}
-      <div className="text-center mb-4 mt-8 lg:mt-0">
-        <h2 className="text-3xl md:text-4xl lg:text-6xl font-semibold dark:text-white">
-          Create an Account
-        </h2>
-        <h3 className="text-gray-500 dark:text-gray-400 max-w-[16rem] mx-auto">
-          Join our community and start something awesome.
-        </h3>
-      </div>
-
+    <div className="min-h-screen bg-gray-100 max-w-screen grid place-content-center pt-16 dark:bg-teal-950  text-black transition-all ease-in-out duration-300 dark:text-white">
       <div className="grid justify-center h-full gap-8 md:gap-16 grid-cols-1 lg:grid-cols-2 container p-4">
         <img
-          className="rounded-[8px] order-2 lg:order-1 mx-auto self-center max-w-full md:max-w-md lg:max-w-full"
+          className="rounded-[8px] order-2 lg:order-1 mx-auto self-center max-w-full lg:max-w-full"
           src={illustration}
           alt="illustration"
         />
 
-        <div className="flex h-full items-center order-1 lg:order-2">
-          <form className="w-full lg:max-w-lg mx-auto" onSubmit={handleSubmit}>
+        <div className="h-full justify-center lg:mx-auto bg-gray-200 dark:bg-gray-950 p-4 px-8 lg:px-16 items-center order-1 lg:order-2 shadow-xl rounded-2xl">
+          <h1 className="text-center text-4xl mb-2">Sign Up</h1>
+          <h3 className="text-gray-500 mb-8 dark:text-gray-400 text-center">
+            Join our community and start something awesome.
+          </h3>
+          <form className="w-full pb-8 flex flex-col" onSubmit={handleSubmit}>
+            {/* Email Field */}
             <div className="mb-5">
               <label
                 htmlFor="email"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                className="flex mb-1 items-center justify-between text-sm font-medium text-gray-900 dark:text-gray-100"
               >
                 Your email
+                {emailError && (
+                  <span className="text-red-500 dark:text-red-400 text-sm font-normal">
+                    {emailError}
+                  </span>
+                )}
               </label>
               <input
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value.trim())}
                 type="email"
                 id="email"
-                className="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light"
+                className={`w-full p-2.5 text-sm rounded-lg border ${
+                  emailError
+                    ? "border-red-500 text-red-600 dark:text-red-400 focus:ring-red-500 focus:border-red-500"
+                    : "border-gray-300 dark:border-gray-600 focus:ring-blue-500 focus:border-blue-500"
+                } bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-400`}
                 placeholder="enter your email address"
                 autoComplete="email"
                 required
               />
             </div>
 
+            {/* Username Field */}
             <div className="mb-5">
               <label
                 htmlFor="user-name"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                className="flex mb-1 items-center justify-between text-sm font-medium text-gray-900 dark:text-gray-100"
               >
                 Your username
+                {userNameError && (
+                  <span className="text-red-500 dark:text-red-400 text-sm font-normal">
+                    {userNameError}
+                  </span>
+                )}
               </label>
-              <div className="relative">
-                <input
-                  value={userName}
-                  onChange={(e) => setUserName(e.target.value)}
-                  type="text"
-                  id="user-name"
-                  className="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light"
-                  placeholder="enter your username"
-                  required
-                />
-                <button
-                  onClick={generateUserName}
-                  className="absolute right-2.5 cursor-pointer top-1/2 transform -translate-y-1/2"
-                >
-                  <img src={ai} className="w-5 h-5" alt="ai" />
-                </button>
-              </div>
+              <input
+                value={userName}
+                onChange={(e) => setUserName(e.target.value.trim())}
+                type="text"
+                id="user-name"
+                className={`w-full p-2.5 text-sm rounded-lg border ${
+                  userNameError
+                    ? "border-red-500 text-red-600 dark:text-red-400 focus:ring-red-500 focus:border-red-500"
+                    : "border-gray-300 dark:border-gray-600 focus:ring-blue-500 focus:border-blue-500"
+                } bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-400 pr-10`}
+                placeholder="enter your unique username"
+                autoComplete="off"
+                required
+              />
             </div>
 
+            {/* Password Field */}
             <div className="mb-5">
               <label
                 htmlFor="password"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                className="block mb-1 text-sm font-medium text-gray-900 dark:text-gray-100"
               >
                 Your password
               </label>
               <div className="relative">
                 <input
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value.trim())}
                   type={showPassword ? "text" : "password"}
                   id="password"
                   placeholder="enter your password"
-                  className="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light"
+                  className="w-full p-2.5 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500 pr-10"
                   autoComplete="new-password"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-2.5 cursor-pointer top-1/2 transform -translate-y-1/2"
+                  className="absolute cursor-pointer right-2.5 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
                 >
-                  {showPassword ? <FaEye /> : <FaEyeSlash />}
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
                 </button>
               </div>
             </div>
 
+            {/* Terms Checkbox */}
             <div className="flex items-start mb-5">
               <div className="flex items-center h-5">
                 <input
                   id="terms"
                   type="checkbox"
-                  value=""
-                  className="w-4 h-4 border border-gray-300 rounded-sm bg-gray-50 cursor-pointer dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
+                  checked={checkbox}
+                  onChange={(e) => setCheckbox(e.target.checked)}
+                  className="w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-blue-600 dark:text-blue-500 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 bg-gray-100 dark:bg-gray-700 cursor-pointer"
                   required
                 />
               </div>
               <label
                 htmlFor="terms"
-                className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300 cursor-pointer"
               >
                 I agree with the{" "}
                 <a
                   href="#"
-                  className="text-blue-600 hover:underline dark:text-blue-500"
+                  className="text-blue-600 dark:text-blue-400 hover:underline"
                 >
                   terms and conditions
                 </a>
               </label>
             </div>
 
-            <div className="flex items-center gap-1 flex-col md:flex-row md:gap-4">
-              <button
-                type="submit"
-                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full cursor-pointer text-sm px-5 py-3 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-              >
-                Register new account
-              </button>
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={isLoading}
+              className={`w-full cursor-pointer py-3 px-5 rounded-full text-sm font-medium text-white ${
+                isLoading
+                  ? "bg-gray-400 dark:bg-gray-600 cursor-not-allowed"
+                  : "bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition-colors"
+              }`}
+            >
+              {isLoading ? (
+                <div className="flex items-center justify-center">
+                  <Spinner size="sm" />
+                  <span className="pl-2">Loading...</span>
+                </div>
+              ) : (
+                "Create New Account"
+              )}
+            </button>
 
-              <span>or</span>
-
-              <button
-                type="button"
-                className="text-black dark:text-white flex items-center gap-2 cursor-pointer rounded-full border border-black dark:border-white hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 font-medium text-sm px-5 py-2.5 text-center transition-colors"
+            {/* Login Link */}
+            <p className="text-center mt-4 text-sm text-gray-600 dark:text-gray-400">
+              Have an account?{" "}
+              <Link
+                to="/sign-in"
+                className="text-blue-600 dark:text-blue-400 font-semibold hover:underline"
               >
-                <FaGoogle />
-                Continue with Google
-              </button>
+                Sign In
+              </Link>
+            </p>
+
+            {/* Divider */}
+            <div className="relative my-4">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-300 dark:border-gray-600"></div>
+              </div>
+              <div className="relative flex justify-center">
+                <span className="px-2 bg-white dark:bg-gray-800 text-sm text-gray-500 dark:text-gray-400">
+                  or
+                </span>
+              </div>
             </div>
+
+            {/* Google Sign-in Button */}
+            <button
+              type="button"
+              className="w-full flex cursor-pointer items-center justify-center gap-2 py-2.5 px-5 rounded-full border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-medium text-sm bg-gray-50 hover:bg-gray-100 dark:bg-gray-900 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition-colors"
+            >
+              <FaGoogle className="text-blue-500" />
+              Continue With Google
+            </button>
           </form>
         </div>
       </div>

@@ -162,9 +162,9 @@ const Header = () => {
                 {/* Login Button */}
                 <Link
                   to="/sign-up"
-                  className="hidden md:block border text-sm px-4 py-1 rounded-full transition border-gray-400 text-black dark:text-white hover:bg-gray-200 dark:hover:bg-gray-800"
+                  className="hidden md:block border text-sm px-4 py-1.5 rounded-full transition border-gray-400 text-black dark:text-white hover:bg-gray-50/50 dark:hover:bg-gray-800"
                 >
-                  Login
+                  Sign-In
                 </Link>
 
                 {/* Mobile Menu Button */}
@@ -220,7 +220,7 @@ const Header = () => {
                     onClick={() => setMobileMenuOpen(false)}
                     className="block w-full text-center border px-4 py-2 rounded-full bg-blue-500 font-semibold border-teal-500 dark:border-teal-500 text-white dark:text-gray-100 hover:bg-blue-600 dark:hover:bg-blue-700 transition"
                   >
-                    Login
+                    Sign-In
                   </Link>
                 </div>
               </motion.div>
