@@ -3,6 +3,7 @@ import illustration from "../assets/sign-up_page.jpg";
 import { FaEye, FaEyeSlash, FaGoogle } from "react-icons/fa";
 import { useState } from "react";
 import { Spinner } from "flowbite-react";
+import { FcGoogle } from "react-icons/fc";
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -253,7 +254,7 @@ const Signup = () => {
               type="button"
               className="w-full flex cursor-pointer items-center justify-center gap-2 py-2.5 px-5 rounded-full border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-medium text-sm bg-gray-50 hover:bg-gray-100 dark:bg-gray-900 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition-colors"
             >
-              <FaGoogle className="text-blue-500" />
+              <FcGoogle className="text-blue-500 text-xl" />
               Continue With Google
             </button>
           </form>

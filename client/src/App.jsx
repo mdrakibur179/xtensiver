@@ -7,10 +7,13 @@ import Dashboard from "./pages/Dashboard";
 import Blogs from "./pages/Blogs";
 import Header from "./components/Header";
 import Contact from "./pages/Contact";
+import Footer from "./components/Footer";
+import ScrollToTop from "./components/ScrollToTop";
 
 const App = () => {
   return (
     <>
+      <ScrollToTop />
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -21,6 +24,7 @@ const App = () => {
         <Route path="/blogs" element={<Blogs />} />
         <Route path="/contact" element={<Contact />} />
       </Routes>
+      <Footer />
     </>
   );
 };
