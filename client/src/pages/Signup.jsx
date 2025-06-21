@@ -50,17 +50,18 @@ const Signup = () => {
       const data = await res.json();
 
       if (!res.ok || data.success === false) {
-        const msg = data.message || "";
+        const msg = data.message || "Something went wrong during signup.";
 
         if (msg.includes("E11000")) {
           if (msg.includes("email")) {
             setEmailError("Email already exists.");
-          }
-          if (msg.includes("username")) {
+          } else if (msg.includes("username")) {
             setUserNameError("Username already exists.");
+          } else {
+            setError(msg);
           }
         } else {
-          alert(msg || "Something went wrong during signup.");
+          setError(msg);
         }
       } else {
         alert("✅ Signup successful");
@@ -87,7 +88,7 @@ const Signup = () => {
         />
 
         <div className="h-full justify-center lg:mx-auto bg-gray-200 dark:bg-gray-950 p-4 px-8 lg:px-16 items-center order-1 lg:order-2 shadow-xl rounded-2xl">
-          <h1 className="text-center text-4xl mb-2">Sign Up</h1>
+          <h1 className="text-center text-4xl mt-4 mb-2">Sign Up</h1>
           <h3 className="text-gray-500 mb-8 dark:text-gray-400 text-center">
             Join our community and start something awesome.
           </h3>
